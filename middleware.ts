@@ -1,6 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+const PROTECTED_PREFIXES = ["/search", "/results", "/assistant", "/saved", "/articles"];
+
+function isProtectedPath(pathname: string) {
+  if (pathname === "/") {
+    return true;
+  }
+
+  return PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+}
+
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -41,10 +53,32 @@ export async function middleware(request: NextRequest) {
     }
   });
 
-  await supabase.auth.getUser();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  const { pathname } = request.nextUrl;
+
+  if (!user && isProtectedPath(pathname)) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/auth";
+    redirectUrl.search = "";
+    redirectUrl.searchParams.set("message", "Sign in to start smarter research.");
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  if (user && pathname === "/auth") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/";
+    redirectUrl.search = "";
+    return NextResponse.redirect(redirectUrl);
+  }
+
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"]
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|xml|txt)$).*)"
+  ]
 };

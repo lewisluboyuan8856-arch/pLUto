@@ -49,5 +49,5 @@ export async function GET(request: Request) {
     );
   }
 
-  return NextResponse.redirect(`${origin}/saved`);
+  return NextResponse.redirect(`${origin}/`);
 }

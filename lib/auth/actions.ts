@@ -63,7 +63,7 @@ export async function signInWithPasswordAction(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/saved");
+  redirect("/");
 }
 
 export async function signUpWithPasswordAction(formData: FormData) {
@@ -102,7 +102,7 @@ export async function signUpWithPasswordAction(formData: FormData) {
 
   if (data.session) {
     revalidatePath("/", "layout");
-    redirect("/saved");
+    redirect("/");
   }
 
   redirectWithMessage("Account created. Check your email to confirm your address, then sign in.");
@@ -114,5 +114,5 @@ export async function signOutAction() {
     await supabaseClient.auth.signOut();
   }
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/auth?message=Signed out successfully.");
 }

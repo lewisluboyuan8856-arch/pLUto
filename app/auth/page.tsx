@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { Chrome } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button, ButtonLink } from "@/components/ui/button";
-import {
-  signInWithGoogleAction,
-  signInWithPasswordAction,
-  signOutAction,
-  signUpWithPasswordAction
-} from "@/lib/auth/actions";
+import { Button } from "@/components/ui/button";
+import { signInWithGoogleAction, signInWithPasswordAction, signUpWithPasswordAction } from "@/lib/auth/actions";
 import { getCurrentUser } from "@/lib/saved-papers";
 import { hasSupabaseEnv } from "@/lib/supabase/server";
 
@@ -29,6 +26,10 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
   const authEnabled = hasSupabaseEnv();
   const user = authEnabled ? await getCurrentUser() : null;
 
+  if (user) {
+    redirect("/");
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr]">
@@ -37,11 +38,14 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
             {authEnabled ? "Supabase auth enabled" : "Auth disabled"}
           </Badge>
           <h1 className="mt-5 font-display text-5xl leading-tight">
-            Sign in to sync your research shortlist across sessions.
+            Hi, I am pLUto, your study companion.
           </h1>
+          <p className="mt-4 font-display text-3xl leading-tight text-white/92">
+            Sign in to start smarter research.
+          </p>
           <p className="mt-5 text-lg leading-8 text-white/72">
-            Sign in to keep saved papers and notes attached to your account. If auth is
-            unavailable, the local browser shortlist still keeps working.
+            Use Google for the fastest start, or sign in with email if you prefer. Once you are in,
+            pLUto keeps your search, compare, and shortlist workflow connected to your session.
           </p>
         </div>
 
@@ -63,29 +67,33 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
             </div>
           ) : null}
 
-          {user ? (
-            <div className="mt-6 space-y-5">
-              <h2 className="font-display text-3xl text-ink">You are signed in.</h2>
-              <p className="text-sm leading-7 text-ink/65">
-                Your current session is tied to <span className="font-medium text-ink">{user.email}</span>.
-                Open your shortlist to manage synced saved papers and notes.
+          <div className="mt-6 space-y-6">
+            <div className="rounded-[1.75rem] border border-ink/10 bg-paper p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/40">
+                Primary sign-in
               </p>
-              <div className="flex flex-wrap gap-3">
-                <ButtonLink href="/saved">Open shortlist</ButtonLink>
-                <form action={signOutAction}>
-                  <Button type="submit" variant="ghost">
-                    Sign out
-                  </Button>
-                </form>
-              </div>
+              <h2 className="mt-3 font-display text-3xl text-ink">Continue with Google</h2>
+              <p className="mt-3 text-sm leading-7 text-ink/65">
+                This is the quickest way to start researching with your synced pLUto workspace.
+              </p>
+              <form action={signInWithGoogleAction} className="mt-5">
+                <Button
+                  type="submit"
+                  className="h-14 w-full gap-3 text-base"
+                  disabled={!authEnabled}
+                >
+                  <Chrome className="h-5 w-5" />
+                  Continue with Google
+                </Button>
+              </form>
             </div>
-          ) : (
-            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+
+            <div className="grid gap-6 lg:grid-cols-2">
               <div className="space-y-4 rounded-[1.5rem] bg-paper p-5">
                 <div>
-                  <h2 className="font-display text-2xl text-ink">Sign in</h2>
+                  <h2 className="font-display text-2xl text-ink">Sign in with email</h2>
                   <p className="mt-2 text-sm leading-7 text-ink/65">
-                    Use your existing account to load synced saved papers.
+                    Use your existing account to load your saved papers and notes.
                   </p>
                 </div>
                 <form action={signInWithPasswordAction} className="space-y-4">
@@ -111,13 +119,8 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
                       className="w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm outline-none placeholder:text-ink/35 disabled:opacity-60"
                     />
                   </label>
-                  <Button type="submit" className="w-full" disabled={!authEnabled}>
-                    Sign in
-                  </Button>
-                </form>
-                <form action={signInWithGoogleAction}>
                   <Button type="submit" variant="ghost" className="w-full" disabled={!authEnabled}>
-                    Continue with Google
+                    Sign in with email
                   </Button>
                 </form>
               </div>
@@ -126,7 +129,7 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
                 <div>
                   <h2 className="font-display text-2xl text-ink">Create account</h2>
                   <p className="mt-2 text-sm leading-7 text-ink/65">
-                    Create a Supabase-backed account so your shortlist can persist.
+                    Create an account if you want a separate email login for pLUto.
                   </p>
                 </div>
                 <label className="block space-y-2">
@@ -161,12 +164,24 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
                     className="w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm outline-none placeholder:text-ink/35 disabled:opacity-60"
                   />
                 </label>
-                <Button type="submit" className="w-full" disabled={!authEnabled}>
+                <Button type="submit" variant="ghost" className="w-full" disabled={!authEnabled}>
                   Create account
                 </Button>
               </form>
             </div>
-          )}
+
+            {authEnabled ? (
+              <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 text-sm leading-7 text-ink/65">
+                After you sign in, pLUto sends you straight to the main research workspace at{" "}
+                <span className="font-medium text-ink">/</span>.
+              </div>
+            ) : (
+              <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 text-sm leading-7 text-ink/65">
+                You can still inspect the UI locally, but sign-in stays disabled until Supabase
+                environment variables are added.
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

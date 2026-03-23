@@ -7,7 +7,6 @@ import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { APP_NAME, MOCK_MODE_LABEL } from "@/lib/constants";
 import { getFeaturedMockTopics } from "@/lib/search/mock-data";
-import { buildAbsoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: {
@@ -37,18 +36,11 @@ export default function HomePage() {
   const featuredTopics = getFeaturedMockTopics();
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: APP_NAME,
-    applicationCategory: "EducationalApplication",
-    operatingSystem: "Web",
-    description:
-      "pLUto is an AI-powered research assistant that helps students sharpen research questions, understand paper relevance, and build a shortlist.",
-    url: buildAbsoluteUrl("/"),
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD"
-    }
+    "@type": "WebApplication",
+    name: "pLUto",
+    url: "https://researchwithai.info",
+    applicationCategory: "EducationApplication",
+    description: "AI-powered research assistant for students"
   };
 
   return (
@@ -65,7 +57,10 @@ export default function HomePage() {
                 {MOCK_MODE_LABEL}
               </Badge>
               <p className="text-sm text-white/62">
-                Search, compare, save, and ask grounded questions from one student-first workflow.
+                {APP_NAME} is an AI Research Assistant for Students.
+              </p>
+              <p className="text-sm text-white/62">
+                Compare, analyse, and understand research papers instantly
               </p>
             </div>
 

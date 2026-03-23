@@ -3,28 +3,18 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
-import { buildAbsoluteUrl, getSiteUrl, shouldAllowIndexing } from "@/lib/site";
+import { shouldAllowIndexing } from "@/lib/site";
 
-const siteUrl = getSiteUrl();
 const allowIndexing = shouldAllowIndexing();
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  applicationName: APP_NAME,
-  title: {
-    default: `${APP_NAME} | AI Research Assistant for Students`,
-    template: `%s | ${APP_NAME}`
-  },
+  metadataBase: new URL("https://researchwithai.info"),
+  title: "pLUto — AI Research Assistant for Students",
   description:
-    "pLUto helps students refine narrow research questions, search live academic sources, understand paper relevance in plain English, and build a focused shortlist.",
-  keywords: [
-    "AI research assistant",
-    "student research tool",
-    "academic paper search",
-    "Google Scholar alternative",
-    "essay research assistant"
-  ],
+    "pLUto helps students find, compare, and analyse research papers using AI. Get summaries, comparisons, and insights instantly.",
+  icons: {
+    icon: "/favicon.ico"
+  },
   robots: allowIndexing
     ? {
         index: true,
@@ -46,19 +36,24 @@ export const metadata: Metadata = {
     google: process.env.GOOGLE_SITE_VERIFICATION || undefined
   },
   openGraph: {
-    title: `${APP_NAME} | ${APP_TAGLINE}`,
-    description:
-      "An academic research assistant for students who need sharper search queries, stronger paper relevance, and a cleaner shortlist workflow.",
-    url: buildAbsoluteUrl("/"),
-    siteName: APP_NAME,
-    locale: "en_US",
+    title: "pLUto — AI Research Assistant",
+    description: "Compare research papers and analyse sources using AI.",
+    url: "https://researchwithai.info",
+    siteName: "pLUto",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630
+      }
+    ],
     type: "website"
   },
   twitter: {
     card: "summary_large_image",
-    title: `${APP_NAME} | ${APP_TAGLINE}`,
-    description:
-      "Search live academic sources, understand why papers matter, and build a better student research shortlist."
+    title: "pLUto — AI Research Assistant",
+    description: "Find and compare research papers using AI",
+    images: ["/og-image.png"]
   }
 };
 

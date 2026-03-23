@@ -84,9 +84,15 @@ export function AskPlutoHero() {
             AI-first research copilot
           </Badge>
           <div className="space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/62">
+              AI Research Assistant for Students
+            </p>
             <h1 className="max-w-4xl font-display text-5xl leading-[1.02] text-white md:text-6xl">
               Ask pLUto like a student. Research like you have a copilot.
             </h1>
+            <p className="max-w-3xl text-xl leading-8 text-white/84">
+              Compare, analyse, and understand research papers instantly
+            </p>
             <p className="max-w-3xl text-lg leading-8 text-white/74">
               Start with the real question in your head. pLUto rewrites it, searches live academic
               sources, identifies stronger papers, and helps you compare evidence without feeling

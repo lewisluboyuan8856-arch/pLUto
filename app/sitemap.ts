@@ -1,26 +1,15 @@
 import type { MetadataRoute } from "next";
 
-import { buildAbsoluteUrl, shouldAllowIndexing } from "@/lib/site";
+const SITE_URL = "https://researchwithai.info";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  if (!shouldAllowIndexing()) {
-    return [];
-  }
-
   const lastModified = new Date();
+  const routes = ["/", "/results", "/assistant", "/saved", "/auth"];
 
-  return [
-    {
-      url: buildAbsoluteUrl("/"),
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 1
-    },
-    {
-      url: buildAbsoluteUrl("/search"),
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.8
-    }
-  ];
+  return routes.map((route) => ({
+    url: `${SITE_URL}${route === "/" ? "" : route}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: route === "/" ? 1 : 0.8
+  }));
 }

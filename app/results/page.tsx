@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { AlertCircle, Sparkles } from "lucide-react";
+import { AlertCircle, CheckCircle2, Sparkles } from "lucide-react";
 
+import { AssistantLaunchBar } from "@/components/research-assistant/assistant-launch-bar";
 import { ArticleCard } from "@/components/results/article-card";
+import { ResultsOverviewPanel } from "@/components/results/results-overview-panel";
 import { SearchForm } from "@/components/search/search-form";
 import { Badge } from "@/components/ui/badge";
 import { DEFAULT_FILTERS } from "@/lib/constants";
 import { runScholarSearch } from "@/lib/search/pipeline";
+import { buildResultsOverview } from "@/lib/search/results-overview";
 import type { SearchFilters } from "@/lib/types";
 
 type ResultsPageProps = {
@@ -45,6 +48,17 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
           articlesWithYear.length
       )
     : null;
+  const overview = results.articles.length
+    ? buildResultsOverview(results.query, results.rewrite, results.articles)
+    : null;
+  const spotlightLabels = overview
+    ? results.articles.reduce((map, article) => {
+        map[article.id] = overview.highlights
+          .filter((highlight) => highlight.article.id === article.id)
+          .map((highlight) => highlight.label);
+        return map;
+      }, {} as Record<string, string[]>)
+    : {};
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
@@ -103,7 +117,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 md:grid-cols-3 xl:grid-cols-4">
         <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-card">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">Open access</p>
           <p className="mt-3 font-display text-4xl text-ink">{openAccessCount}</p>
@@ -116,20 +130,76 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">Average year</p>
           <p className="mt-3 font-display text-4xl text-ink">{averageYear ?? "n/a"}</p>
         </div>
+        <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-card">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">AI overview mode</p>
+          <p className="mt-3 flex items-center gap-2 text-lg font-semibold text-ink">
+            <CheckCircle2 className="h-5 w-5 text-sage" />
+            Metadata-grounded
+          </p>
+        </div>
       </div>
 
-      <div className="mt-10 space-y-6">
-        {results.articles.length ? (
-          results.articles.map((article) => <ArticleCard key={article.id} article={article} />)
-        ) : (
-          <div className="rounded-[2rem] border border-dashed border-ink/15 bg-white p-10 text-center">
-            <h2 className="font-display text-3xl text-ink">No results matched those filters.</h2>
-            <p className="mt-3 text-sm text-ink/60">
-              Try broadening the topic, turning off one filter, or switching the level.
-            </p>
+      {results.articles.length ? (
+        <>
+          <div className="mt-10">
+            <ResultsOverviewPanel
+              query={results.query}
+              rewrite={results.rewrite}
+              articles={results.articles}
+            />
           </div>
-        )}
-      </div>
+
+          <div className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="space-y-6">
+              {results.articles.map((article) => (
+                <ArticleCard
+                  key={article.id}
+                  article={article}
+                  spotlightLabels={spotlightLabels[article.id]}
+                />
+              ))}
+            </div>
+
+            <aside className="space-y-6 xl:sticky xl:top-24 xl:self-start">
+              <AssistantLaunchBar variant="dashboard" />
+
+              <div className="rounded-[1.9rem] border border-ink/10 bg-white p-6 shadow-card">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/42">
+                  Reading strategy
+                </p>
+                <div className="mt-4 space-y-4">
+                  {overview?.actionPlan.map((step, index) => (
+                    <div key={step} className="rounded-[1.35rem] bg-paper p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/40">
+                        Move 0{index + 1}
+                      </p>
+                      <p className="mt-2 text-sm leading-7 text-ink/72">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[1.9rem] border border-ink/10 bg-white p-6 shadow-card">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink/42">
+                  Source quality guide
+                </p>
+                <div className="mt-4 space-y-3 text-sm leading-7 text-ink/68">
+                  <p>Review or meta-analysis papers are stronger for background and evaluation.</p>
+                  <p>Higher citations can suggest influence, but newer papers may have fewer citations simply because they are recent.</p>
+                  <p>Open access makes it easier to verify claims directly before citing them in an essay or report.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </>
+      ) : (
+        <div className="mt-10 rounded-[2rem] border border-dashed border-ink/15 bg-white p-10 text-center">
+          <h2 className="font-display text-3xl text-ink">No results matched those filters.</h2>
+          <p className="mt-3 text-sm text-ink/60">
+            Try broadening the topic, turning off one filter, or switching the level.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

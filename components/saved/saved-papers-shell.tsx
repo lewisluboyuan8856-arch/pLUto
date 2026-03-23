@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowUpRight, NotebookPen, Trash2 } from "lucide-react";
 
+import { SelectPaperButton } from "@/components/research-assistant/select-paper-button";
 import { CitationCopyButtons } from "@/components/results/citation-copy-buttons";
 import { NoteEditor } from "@/components/saved/note-editor";
 import { Badge } from "@/components/ui/badge";
@@ -110,6 +111,7 @@ export function SavedPapersShell() {
             </div>
 
             <div className="flex flex-wrap gap-3">
+              <SelectPaperButton article={paper.article} />
               <button
                 type="button"
                 onClick={() => removeBrowserSavedPaper(paper.articleId)}

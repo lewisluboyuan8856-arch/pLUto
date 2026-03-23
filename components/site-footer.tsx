@@ -17,6 +17,9 @@ export function SiteFooter() {
           <Link href="/search" className="transition hover:text-ink">
             Search
           </Link>
+          <Link href="/assistant" className="transition hover:text-ink">
+            Compare &amp; Chat
+          </Link>
           <Link href="/saved" className="transition hover:text-ink">
             Shortlist
           </Link>

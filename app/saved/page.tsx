@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { AssistantLaunchBar } from "@/components/research-assistant/assistant-launch-bar";
 import { AccountSavedPapersShell } from "@/components/saved/account-saved-papers-shell";
 import { AccountSync } from "@/components/saved/account-sync";
 import { SavedPapersShell } from "@/components/saved/saved-papers-shell";
@@ -74,6 +75,8 @@ export default async function SavedPage() {
           </div>
         </div>
       ) : null}
+
+      <AssistantLaunchBar />
 
       {authEnabled && user ? (
         <>

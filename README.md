@@ -16,6 +16,7 @@ pLUto is an AI-powered research assistant for students. It helps secondary schoo
 - Supabase email/password auth
 - Supabase Google OAuth
 - Saved papers and notes with browser fallback
+- Grounded Research Assistant compare/chat workflow
 - Vercel-ready metadata, robots, sitemap, and canonical URL handling
 
 ## Local env vars
@@ -161,10 +162,13 @@ If you prefer Search Console meta-tag verification instead of DNS verification:
 5. If Google OAuth is configured, test Google login.
 6. Save a paper while signed in and confirm it appears in the synced shortlist.
 7. Add a note and refresh to confirm it persists.
-8. Run `npm run build`
-9. Run `npm run lint`
-10. Run `npm run typecheck`
-11. Run `npm run dev`
+8. Select 2 to 5 papers from `/results` or `/saved` and open `/assistant`.
+9. Confirm the assistant page loads and the selected sources appear in context.
+10. Ask a grounded question or run `Compare papers`.
+11. Run `npm run build`
+12. Run `npm run lint`
+13. Run `npm run typecheck`
+14. Run `npm run dev`
 
 ## Notes
 

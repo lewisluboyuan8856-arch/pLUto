@@ -85,3 +85,59 @@ export type SavedPaperRecord = {
     content: string;
   } | null;
 };
+
+export type ResearchAssistantMode = "compare" | "chat" | "essay";
+
+export type ResearchAssistantGrounding = {
+  articleId: string;
+  title: string;
+  evidenceNote: string;
+};
+
+export type ResearchAssistantComparison = {
+  researchQuestion: string;
+  methodology: string;
+  findings: string;
+  conclusions: string;
+  agreementMap: string;
+  contradictions: string;
+  limitations: string;
+  strongestPaper: string;
+  bestForEssayProject: string;
+  studentUsefulness: string;
+  evidenceParagraph: string;
+};
+
+export type ResearchAssistantStudentOutputs = {
+  comparisonParagraph: string;
+  researchNotes: string;
+  usageNote: string;
+};
+
+export type ResearchAssistantSourceQuality = {
+  articleId: string;
+  title: string;
+  studyType: string;
+  recency: string;
+  citations: string;
+  openAccess: string;
+  studentUsefulness: string;
+  suggestedRole: "Background" | "Evidence" | "Counterargument" | "Evaluation";
+  confidenceNote: string;
+  strengthScore: number;
+};
+
+export type ResearchAssistantResponse = {
+  mode: ResearchAssistantMode;
+  answer: string;
+  comparison?: ResearchAssistantComparison;
+  studentOutputs: ResearchAssistantStudentOutputs;
+  grounding: ResearchAssistantGrounding[];
+  sourceQuality: ResearchAssistantSourceQuality[];
+  usedFallback: boolean;
+};
+
+export type ResearchAssistantSelection = {
+  article: ResearchArticle;
+  selectedAt: string;
+};

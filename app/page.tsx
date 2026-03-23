@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowRight, BookOpenText, BrainCircuit, SearchCheck, Sparkles } from "lucide-react";
 
-import { SearchForm } from "@/components/search/search-form";
+import { AskPlutoHero } from "@/components/home/ask-pluto-hero";
 import { TopicPills } from "@/components/search/topic-pills";
 import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,19 +17,19 @@ export const metadata: Metadata = {
 
 const features = [
   {
-    title: "Intent-aware search framing",
+    title: "AI starts the workflow",
     copy:
-      "pLUto starts from the question a student would really ask, then reshapes it into tighter academic language and clearer search angles."
+      "The homepage now behaves like a live research prompt, so students can begin with a question, argument, or comparison instead of hunting for the right keyword formula first."
   },
   {
-    title: "Shortlists over endless tabs",
+    title: "Results act like a research brief",
     copy:
-      "Instead of flooding the page with barely related papers, the product is designed to surface a confident shortlist with explanation, fit, and trade-offs."
+      "The results experience is built around an intelligent overview, source picks, trust signals, and essay-oriented guidance rather than an undifferentiated list of cards."
   },
   {
-    title: "Built to explain, not just retrieve",
+    title: "The copilot stays grounded",
     copy:
-      "Every result is still presented in student-friendly language, even when the underlying metadata comes from live academic APIs."
+      "Compare and chat features stay explicitly tied to the selected papers and metadata already visible inside pLUto."
   }
 ];
 
@@ -58,60 +58,39 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <section className="bg-hero-grid text-white">
-        <div className="mx-auto grid max-w-7xl gap-16 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
           <div className="space-y-8">
-            <Badge className="border-white/15 bg-white/10 text-white">
-              {MOCK_MODE_LABEL}
-            </Badge>
-            <div className="space-y-6">
-              <h1 className="max-w-3xl font-display text-5xl leading-tight md:text-6xl">
-                Research that starts where students do, then gets sharper fast.
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-white/78">
-                {APP_NAME} helps students turn messy topic ideas into stronger academic searches,
-                rank live research results, and keep a clean shortlist with notes and citations.
-                If live search fails, the app falls back gracefully so the workflow still works.
+            <div className="flex flex-wrap items-center gap-4">
+              <Badge className="border-white/15 bg-white/10 text-white">
+                {MOCK_MODE_LABEL}
+              </Badge>
+              <p className="text-sm text-white/62">
+                Search, compare, save, and ask grounded questions from one student-first workflow.
               </p>
             </div>
-            <div className="flex flex-wrap gap-4">
-              <ButtonLink href="/search">Start searching</ButtonLink>
-              <ButtonLink href="/results?topic=What%20are%20the%20ethical%20trade-offs%20of%20gene%20editing%20in%20agriculture%3F" variant="secondary">
-                Explore sample results
-              </ButtonLink>
-            </div>
-            <TopicPills topics={featuredTopics} dark />
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-5 backdrop-blur">
-                <SearchCheck className="h-6 w-6 text-coral" />
-                <p className="mt-4 text-2xl font-semibold">OpenAlex-first search</p>
-                <p className="mt-1 text-sm text-white/68">Live academic metadata with fallback</p>
-              </div>
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-5 backdrop-blur">
-                <BrainCircuit className="h-6 w-6 text-sage" />
-                <p className="mt-4 text-2xl font-semibold">Query shaping</p>
-                <p className="mt-1 text-sm text-white/68">Rewrites narrow student questions</p>
-              </div>
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-5 backdrop-blur">
-                <BookOpenText className="h-6 w-6 text-gold" />
-                <p className="mt-4 text-2xl font-semibold">Shortlist workflow</p>
-                <p className="mt-1 text-sm text-white/68">Save, note, and revisit papers</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="self-center">
-            <div className="surface-border rounded-[2rem] bg-white/10 p-[1px]">
-              <div className="rounded-[2rem] bg-[#f4f3ef] p-5 text-ink shadow-glow">
-                <div className="mb-5 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/45">
-                      Search preview
-                    </p>
-                    <h2 className="mt-2 font-display text-2xl">Start with the messy version</h2>
-                  </div>
-                  <Sparkles className="h-6 w-6 text-coral" />
+            <AskPlutoHero />
+
+            <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
+                    Fast starts
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-white/72">
+                    Sample topics that show how pLUto works across essays, projects, and narrow
+                    academic questions.
+                  </p>
                 </div>
-                <SearchForm compact initialTopic="How does urban greening affect heat islands in dense cities?" />
+                <ButtonLink
+                  href="/results?topic=What%20are%20the%20ethical%20trade-offs%20of%20gene%20editing%20in%20agriculture%3F"
+                  variant="secondary"
+                >
+                  Explore sample results
+                </ButtonLink>
+              </div>
+              <div className="mt-5">
+                <TopicPills topics={featuredTopics} dark />
               </div>
             </div>
           </div>
@@ -132,29 +111,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-24 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+      <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-24 lg:grid-cols-[1fr_1fr] lg:px-8">
         <div className="rounded-[2.25rem] bg-ink p-10 text-white shadow-glow">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">
-            Why pLUto works
+            Why pLUto feels different
           </p>
           <h2 className="mt-4 font-display text-4xl leading-tight">
-            The research workflow stays focused even when the topic is narrow.
+            It behaves like a research dashboard, not a blank search box plus cards.
           </h2>
           <p className="mt-5 max-w-xl text-base leading-8 text-white/74">
-            Students can search live academic sources, read plain-English relevance notes, save
-            useful papers, and return to a structured shortlist without juggling dozens of tabs.
+            Students can search live academic sources, compare selected papers, see which source is
+            most useful for an essay, and move straight into grounded synthesis without leaving the
+            workflow.
           </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5">
+              <SearchCheck className="h-6 w-6 text-coral" />
+              <p className="mt-4 text-xl font-semibold">Live search</p>
+              <p className="mt-2 text-sm text-white/68">OpenAlex-first with fallback resilience</p>
+            </div>
+            <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5">
+              <BrainCircuit className="h-6 w-6 text-sage" />
+              <p className="mt-4 text-xl font-semibold">Research copilot</p>
+              <p className="mt-2 text-sm text-white/68">Grounded compare, chat, and essay support</p>
+            </div>
+            <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5">
+              <BookOpenText className="h-6 w-6 text-gold" />
+              <p className="mt-4 text-xl font-semibold">Shortlist memory</p>
+              <p className="mt-2 text-sm text-white/68">Saved papers, notes, and citations stay close</p>
+            </div>
+          </div>
         </div>
         <div className="grid gap-5">
           {[
-            "Turns vague prompts into stronger academic search angles",
-            "Searches OpenAlex first and merges secondary metadata when available",
-            "Presents ranked paper cards with relevance explanations",
-            "Opens a dedicated article breakdown for deeper reading",
-            "Lets users save papers and notes locally in-browser",
-            "Falls back gracefully if live search is temporarily unavailable"
+            "Start with a natural-language research question on the homepage",
+            "Get an AI-style overview of the topic before scanning individual papers",
+            "See which source is strongest, most reliable, and most beginner-friendly",
+            "Select papers into Compare & Chat directly from the results flow",
+            "Use quality indicators to judge citation strength, recency, and evidence type",
+            "Keep auth, saved papers, citations, and deployment readiness intact"
           ].map((item) => (
-            <div key={item} className="flex items-center justify-between rounded-[1.5rem] border border-ink/10 bg-white px-6 py-5 shadow-card">
+            <div
+              key={item}
+              className="flex items-center justify-between rounded-[1.5rem] border border-ink/10 bg-white px-6 py-5 shadow-card"
+            >
               <span className="text-sm font-medium text-ink/72">{item}</span>
               <ArrowRight className="h-4 w-4 text-coral" />
             </div>

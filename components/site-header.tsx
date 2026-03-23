@@ -20,6 +20,9 @@ export function SiteHeader() {
           <Link href="/search" className="transition hover:text-white">
             Search
           </Link>
+          <Link href="/assistant" className="transition hover:text-white">
+            Compare &amp; Chat
+          </Link>
           <Link href="/results?topic=How%20does%20urban%20greening%20affect%20heat%20islands%20in%20dense%20cities%3F" className="transition hover:text-white">
             Sample results
           </Link>

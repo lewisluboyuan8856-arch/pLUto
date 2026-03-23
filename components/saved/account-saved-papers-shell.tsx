@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, NotebookPen, Trash2 } from "lucide-react";
 
+import { SelectPaperButton } from "@/components/research-assistant/select-paper-button";
 import { CitationCopyButtons } from "@/components/results/citation-copy-buttons";
 import { AccountNoteEditor } from "@/components/saved/account-note-editor";
 import { Badge } from "@/components/ui/badge";
@@ -77,6 +78,7 @@ export function AccountSavedPapersShell({ savedPapers }: { savedPapers: SavedPap
               </div>
 
               <div className="flex flex-wrap gap-3">
+                <SelectPaperButton article={article} />
                 <form action={deleteSavedPaperAction}>
                   <input type="hidden" name="savedPaperId" value={paper.id} />
                   <button
